@@ -1,0 +1,95 @@
+Hardware: 
+Intel Core i5 8300H
+8GB DDR4
+SSD (High IOPS)
+OS: Kali Linux 5.16.0-amd64
+in.txt (range): 1e5-1e7
+================
+hand-created using benchmark.cpp multiple times, N=5
+================
+[1]: primesFinder (not synced):
+Avg time on 1-threads =5462.39 <==== worst
+Avg time on 2-threads =3492.7
+Avg time on 3-threads =2515.79
+Avg time on 4-threads =2009.65
+Avg time on 5-threads =1923.44
+Avg time on 6-threads =1792.57
+Avg time on 7-threads =1793.75
+Avg time on 8-threads =1798.74
+Avg time on 9-threads =1645.34
+Avg time on 10-threads =1479.69
+Avg time on 11-threads =1421.09
+Avg time on 12-threads =1432.32
+Avg time on 13-threads =1393.43 <==== best
+Avg time on 14-threads =1413.59
+Avg time on 15-threads =1402.34
+Avg time on 16-threads =1394.33
+================
+[2]: syncedPrimesFinder:
+Avg time on 1-threads =5114.12 <==== worst
+Avg time on 2-threads =3330.97
+Avg time on 3-threads =2535.12
+Avg time on 4-threads =2053.43
+Avg time on 5-threads =1882.02
+Avg time on 6-threads =1901.45
+Avg time on 7-threads =1874.23
+Avg time on 8-threads =1830.21
+Avg time on 9-threads =1796.33
+Avg time on 10-threads =1783.12
+Avg time on 11-threads =1758.12
+Avg time on 12-threads =1778.8
+Avg time on 13-threads =1777.87
+Avg time on 14-threads =1747.85 <==== best
+Avg time on 15-threads =1781.7
+Avg time on 16-threads =1764.34
+================
+optimizedPrimesFinder
+Avg time on 1-threads =4940.31 <==== worst
+Avg time on 2-threads =3152.39
+Avg time on 3-threads =2244.93
+Avg time on 4-threads =1794.64
+Avg time on 5-threads =1714.65
+Avg time on 6-threads =1642.76
+Avg time on 7-threads =1509.83
+Avg time on 8-threads =1456.84
+Avg time on 9-threads =1435.59
+Avg time on 10-threads =1403.19
+Avg time on 11-threads =1426.04
+Avg time on 12-threads =1388.92
+Avg time on 13-threads =1403.36
+Avg time on 14-threads =1388.38
+Avg time on 15-threads =1376.35 <==== best
+Avg time on 16-threads =1384.31
++++++++++++++++++++++++++++++++
++ not synced version is giving wrong answers but is much faster.
++ optimizedPrimesFinder is 22% faster than syncedPrimesFinder with correct answers!
+
+==========
+comparing optimizedPrimesFinder with cacheline alignment of 8B
+and 64B using ` perf_5.14 stat ./opti{8/64} 8`
+
+ Performance counter stats for './opti8 8':
+          8,711.63 msec task-clock       #  6.008 CPUs utilized          
+             1,282      context-switches #  145.681 /sec                   
+                 7      cpu-migrations   #  0.804 /sec                   
+               463      page-faults      #  53.147 /sec                   
+    31,144,014,893      cycles           #  3.575 GHz                    
+    24,827,947,699      instructions     #  0.80  insn per cycle         
+     7,039,132,883      branches         #  808.015 M/sec                  
+         5,219,399      branch-misses    #  0.07% of all branches        
+       1.650030858 seconds time elapsed
+       8.701315000 seconds user
+       0.012018000 seconds sys
+===========================
+ Performance counter stats for './opti64 8':
+          8,630.81 msec task-clock       #  6.143 CPUs utilized          
+             1,028      context-switches #  119.108 /sec                   
+                10      cpu-migrations   #  1.159 /sec                   
+               465      page-faults      #  53.877 /sec                   
+    30,884,420,012      cycles           #  3.578 GHz                    
+    24,827,222,812      instructions     #  0.80  insn per cycle         
+     7,038,957,043      branches         #  815.561 M/sec                  
+         5,182,616      branch-misses    #  0.07% of all branches        
+       1.405085159 seconds time elapsed
+       8.628534000 seconds user
+       0.004000000 seconds sys
